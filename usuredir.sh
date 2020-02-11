@@ -1,6 +1,6 @@
 #!/bin/bash
 #estudiante:karen martinez mendoza
-
+#ojo solo root puede ejecutar esto
 OUTPUT="/tmp/input.txt"
 let fuera=0
 #variables globales
@@ -55,10 +55,21 @@ function_verdatos(){
     rm /tmp/calc.tmp
     rm /tmp/calc2.tmp
     # Dibuja funcion verdatos
-    dialog --msgbox "usuario: $username \n\
-		     grupo: $grupoid " 15 20
+    dialog --title "info a ingresar" \
+	   --msgbox "usuario: $username \n\
+		     grupo: $grupoid \n\
+		     directorio: $directoriohome \n\
+		     is uduario: $usuarioid
+                     contraseña: $usuariopass" 15 30
 }
-
+function_crear(){
+ echo "$username:x:$usuarioid:$grupoid::$directoriohome:/bin/bash" >> /etc/passwd
+ echo "$username:x:$usuarioid" >> /etc/group
+ mkdir $directoriohome
+ chown $username $directoriohome
+ echo "$username:$usuariopass" | chpasswd
+ echo "el usuario se ha creado satisfactoriamente"
+}
 #Menu principal
 function_menu(){
         dialog --clear --title "PROGRAMA -- gestion usuarios" \
@@ -81,12 +92,12 @@ function_menu(){
 	case $menuitem in
 		1) function_username;;
 		2) echo "Elegiste grupoid"; function_grupoid;;
-#		3) echo "Elegiste multiplicar"; function_;;
-#		4) echo "Elegiste dividir"; function_division;;
-#		5) echo "Elegiste modulo"; function_modulo;;
-#		6) echo "Elegiste modulo"; function_modulo;;
-#		7) echo "Elegiste modulo"; function_modulo;;
-#		8) fuera=1;
+		3) echo "Elegiste directorio"; function_directoriohome;;
+		4) echo "Elegiste usuarioid"; function_usuarioid;;
+		5) echo "Elegiste usuariopass"; function_usuariopass;;
+		6) echo "Elegiste verdatos"; function_verdatos;;
+		7) echo "Elegiste crear"; function_crear;;
+		8) fuera=1;
 	esac
 }
 while [ $fuera -eq 0 ]
